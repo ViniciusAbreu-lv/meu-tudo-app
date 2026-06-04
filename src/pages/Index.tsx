@@ -1,78 +1,135 @@
 "use client";
 
-import React from 'react';
-import Layout from '@/components/Layout';
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Shield, Zap, Globe } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
+import { Rocket } from 'lucide-react';
 
 const Index = () => {
-  const { user } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { user, loading: authLoading } = useAuth();
+  const navigate = useNavigate();
+
+  // Se o usuário já estiver logado, envia para a Home
+  useEffect(() => {
+    if (!authLoading && user) {
+      navigate('/home', { replace: true });
+    }
+  }, [user, authLoading, navigate]);
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    const { error } = await supabase.auth.signUp({ email, password });
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success("Cadastro realizado! Verifique seu e-mail para confirmar.");
+    }
+    setLoading(false);
+  };
+
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success("Bem-vindo de volta!");
+      navigate('/home');
+    }
+    setLoading(false);
+  };
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   return (
-    <Layout>
-      {/* Hero Section */}
-      <section className="relative py-20 lg:py-32 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-5xl lg:text-7xl font-extrabold tracking-tight mb-6 bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-              Construa o futuro da sua aplicação
-            </h1>
-            <p className="text-xl text-muted-foreground mb-10 leading-relaxed">
-              Uma plataforma robusta, escalável e incrivelmente rápida para gerenciar seus projetos com a eficiência que você merece.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to={user ? "/home" : "/auth"}>
-                <Button size="lg" className="rounded-full px-8 text-lg h-14 w-full sm:w-auto">
-                  {user ? "Ir para o App" : "Começar Agora"} <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
-              <Button size="lg" variant="outline" className="rounded-full px-8 text-lg h-14">
-                Ver Demonstração
-              </Button>
-            </div>
+    <div className="min-h-screen flex items-center justify-center bg-accent/30 p-4">
+      <div className="w-full max-w-md space-y-8">
+        <div className="text-center">
+          <div className="inline-flex bg-primary p-3 rounded-2xl mb-4">
+            <Rocket className="h-8 w-8 text-primary-foreground" />
           </div>
+          <h1 className="text-3xl font-bold tracking-tight">VigilantApp</h1>
+          <p className="text-muted-foreground mt-2">Sua central de produtividade segura</p>
         </div>
-        
-        {/* Background Decoration */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 opacity-10 pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary rounded-full blur-[120px]" />
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500 rounded-full blur-[120px]" />
-        </div>
-      </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-accent/30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-background p-8 rounded-3xl border border-border shadow-sm hover:shadow-md transition-shadow">
-              <div className="bg-blue-100 w-12 h-12 rounded-2xl flex items-center justify-center mb-6">
-                <Zap className="text-blue-600 h-6 w-6" />
-              </div>
-              <h3 className="text-xl font-bold mb-3">Alta Performance</h3>
-              <p className="text-muted-foreground">Otimizado para velocidade máxima em qualquer dispositivo ou conexão.</p>
-            </div>
-            
-            <div className="bg-background p-8 rounded-3xl border border-border shadow-sm hover:shadow-md transition-shadow">
-              <div className="bg-green-100 w-12 h-12 rounded-2xl flex items-center justify-center mb-6">
-                <Shield className="text-green-600 h-6 w-6" />
-              </div>
-              <h3 className="text-xl font-bold mb-3">Segurança Total</h3>
-              <p className="text-muted-foreground">Proteção de dados de nível empresarial para sua tranquilidade.</p>
-            </div>
-            
-            <div className="bg-background p-8 rounded-3xl border border-border shadow-sm hover:shadow-md transition-shadow">
-              <div className="bg-purple-100 w-12 h-12 rounded-2xl flex items-center justify-center mb-6">
-                <Globe className="text-purple-600 h-6 w-6" />
-              </div>
-              <h3 className="text-xl font-bold mb-3">Escala Global</h3>
-              <p className="text-muted-foreground">Infraestrutura pronta para crescer junto com o seu negócio.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-    </Layout>
+        <Tabs defaultValue="login" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-8">
+            <TabsTrigger value="login">Login</TabsTrigger>
+            <TabsTrigger value="register">Cadastro</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="login">
+            <Card className="border-none shadow-xl rounded-3xl">
+              <CardHeader>
+                <CardTitle>Entrar</CardTitle>
+                <CardDescription>Acesse sua conta para gerenciar suas tarefas.</CardDescription>
+              </CardHeader>
+              <form onSubmit={handleSignIn}>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="email">E-mail</Label>
+                    <Input id="email" type="email" placeholder="seu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="password">Senha</Label>
+                    <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <Button className="w-full rounded-full h-12" type="submit" disabled={loading}>
+                    {loading ? "Entrando..." : "Entrar"}
+                  </Button>
+                </CardFooter>
+              </form>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="register">
+            <Card className="border-none shadow-xl rounded-3xl">
+              <CardHeader>
+                <CardTitle>Criar Conta</CardTitle>
+                <CardDescription>Comece a organizar sua rotina agora mesmo.</CardDescription>
+              </CardHeader>
+              <form onSubmit={handleSignUp}>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="reg-email">E-mail</Label>
+                    <Input id="reg-email" type="email" placeholder="seu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="reg-password">Senha</Label>
+                    <Input id="reg-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                  </div>
+                </CardContent>
+                <CardFooter>
+                  <Button className="w-full rounded-full h-12" type="submit" disabled={loading}>
+                    {loading ? "Criando..." : "Cadastrar"}
+                  </Button>
+                </CardFooter>
+              </form>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
   );
 };
 
