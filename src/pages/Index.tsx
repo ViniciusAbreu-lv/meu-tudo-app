@@ -4,8 +4,12 @@ import React from 'react';
 import Layout from '@/components/Layout';
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, Zap, Globe } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Index = () => {
+  const { user } = useAuth();
+
   return (
     <Layout>
       {/* Hero Section */}
@@ -19,9 +23,11 @@ const Index = () => {
               Uma plataforma robusta, escalável e incrivelmente rápida para gerenciar seus projetos com a eficiência que você merece.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="rounded-full px-8 text-lg h-14">
-                Começar Agora <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
+              <Link to={user ? "/home" : "/auth"}>
+                <Button size="lg" className="rounded-full px-8 text-lg h-14 w-full sm:w-auto">
+                  {user ? "Ir para o App" : "Começar Agora"} <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
               <Button size="lg" variant="outline" className="rounded-full px-8 text-lg h-14">
                 Ver Demonstração
               </Button>
