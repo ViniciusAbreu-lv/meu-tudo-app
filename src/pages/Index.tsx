@@ -118,7 +118,22 @@ if (!certeza) return;
     } catch (error: any) {
       toast.error("Erro ao excluir");
 
-      
+      const editarTarefa = async (id: number, tituloAtual: string) => {
+  const certeza = window.confirm(`Tem certeza que deseja editar a tarefa "${tituloAtual}"?`);
+  if (!certeza) return;
+
+  const novoTitulo = prompt("Digite o novo nome da tarefa:", tituloAtual);
+  if (!novoTitulo || novoTitulo.trim() === "") return;
+
+  try {
+    const { error } = await supabase.from('tarefas').update({ titulo: novoTitulo }).eq('id', id);
+    if (error) throw error;
+    setTarefas(prev => prev.map(t => t.id === id ? { ...t, titulo: novoTitulo } : t));
+    toast.success("Editada com sucesso!");
+  } catch (error) {
+    toast.error("Erro ao editar");
+  }
+};
     }
   };
 
