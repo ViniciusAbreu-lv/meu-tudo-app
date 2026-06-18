@@ -109,12 +109,16 @@ const Index = () => {
 
   const excluirTarefa = async (id: number) => {
     try {
+      const certeza = window.confirm("Tem certeza que deseja excluir esta tarefa?");
+if (!certeza) return;
       const { error } = await supabase.from('tarefas').delete().eq('id', id);
       if (error) throw error;
       setTarefas(prev => prev.filter(t => t.id !== id));
       toast.success("Removida");
     } catch (error: any) {
       toast.error("Erro ao excluir");
+
+      
     }
   };
 
