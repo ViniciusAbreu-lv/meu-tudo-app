@@ -225,7 +225,7 @@ if (!certeza) return;
                         <Button
   variant="ghost"
   size="icon"
-  className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-foreground"
+  className=""
   onClick={() => editarTarefa(t.id, t.titulo)}
 >
   <Edit2 className="h-5 w-5" />
