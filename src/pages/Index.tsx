@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Edit2, Rocket, LogOut, Plus, CheckCircle2, Circle, Loader2, Trash2, X } from 'lucide-react';
+import { Edit2, Rocket, LogOut, Plus, CheckCircle2, Circle, Loader2, Trash2 } from 'lucide-react';
 import Layout from '@/components/Layout';
 
 interface Tarefa {
