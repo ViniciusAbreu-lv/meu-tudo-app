@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Edit2, Rocket, LogOut, Plus, CheckCircle2, Circle, Loader2, Trash2 } from 'lucide-react';
+import { Edit2, Rocket, LogOut, Plus, CheckCircle2, Circle, Loader2, Trash2, X } from 'lucide-react';
 import Layout from '@/components/Layout';
 
 interface Tarefa {
@@ -211,49 +211,34 @@ if (!certeza) return;
                   </div>
                 ) : (
                   <div className="divide-y divide-border/50">
-                   {tarefas.map((t) => (
-            <div key={t.id} className="flex items-center px-8 py-5 hover:bg-primary/5 group justify-between">
-              <div 
-                className="flex items-center gap-4 cursor-pointer flex-1"
-                onClick={() => alternarConcluido(t.id, t.concluido)}
-              >
-                {t.concluido ? (
-                  <CheckCircle2 className="h-6 w-6 text-green-500 transition-all" />
-                ) : (
-                  <Circle className="h-6 w-6 text-muted-foreground transition-all hover:text-primary" />
+                    {tarefas.map((t) => (
+                      <div key={t.id} className="flex items-center px-8 py-5 hover:bg-primary/5 group">
+                        <button 
+                          onClick={() => alternarConcluido(t.id, t.concluido)}
+                          className={`transition-all ${t.concluido ? 'text-green-500' : 'text-muted-foreground hover:text-primary'}`}
+                        >
+                          {t.concluido ? <CheckCircle2 className="h-7 w-7" /> : <Circle className="h-7 w-7" />}
+                        </button>
+                        <span className={`ml-4 flex-grow text-lg ${t.concluido ? 'line-through text-muted-foreground/60' : ''}`}>
+                          {t.titulo}
+                        </span>
+                       
+                        <Button 
+                          variant="ghost" size="icon" 
+                          className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive"
+                          onClick={() => excluirTarefa(t.id)}
+                        >
+                          <Trash2 className="h-5 w-5" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
                 )}
-                <span className={`transition-all ${t.concluido ? 'line-through text-muted-foreground/60' : 'text-foreground'}`}>
-                  {t.titulo}
-                </span>
-              </div>
-              
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-muted-foreground hover:text-foreground"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    editarTarefa(t.id, t.titulo);
-                  }}
-                >
-                  <Edit2 className="h-5 w-5" />
-                </Button>
-
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-destructive hover:text-destructive"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    excluirTarefa(t.id);
-                  }}
-                >
-                  <Trash2 className="h-5 w-5" />
-                </Button>
-              </div>
-            </div>
-          ))}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </Layout>
     );
   }
 
