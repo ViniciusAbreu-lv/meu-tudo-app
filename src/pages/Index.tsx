@@ -222,12 +222,7 @@ if (!certeza) return;
                         <span className={`ml-4 flex-grow text-lg ${t.concluido ? 'line-through text-muted-foreground/60' : ''}`}>
                           {t.titulo}
                         </span>
-                       <button 
-  onClick={() => editarTarefa(t.id, t.titulo)} 
-  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px', zIndex: 9999, position: 'relative' }}
->
-  ✏️
-</button>
+                       
                         <Button 
                           variant="ghost" size="icon" 
                           className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive"
