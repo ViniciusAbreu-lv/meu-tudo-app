@@ -226,11 +226,24 @@ if (!certeza) return;
                         <Button 
                           variant="ghost" size="icon" 
                           className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive"
-                          onEditClick={() => {}} // ignore isso, foque no bloco abaixo
-                    ))}
+                         onClick={(e) => {
+                    e.stopPropagation();
+                    excluirTarefa(t.id);
+                  }}
+                >
+                  <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
+                    <span 
+                      onClick={(e) => { 
+                        e.stopPropagation(); 
+                        editarTarefa(t.id, t.titulo); 
+                      }} 
+                      style={{ cursor: 'pointer', fontSize: '18px', padding: '5px' }}
+                    >
+                      ✏️
+                    </span>
+                    <Trash2 className="h-5 w-5" />
                   </div>
-                )}
-              </CardContent>
+                </Button>
             </Card>
           </div>
         </div>
