@@ -231,19 +231,19 @@ if (!certeza) return;
                     excluirTarefa(t.id);
                   }}
                 >
-                  <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-                    <span 
-                      onClick={(e) => { 
-                        e.stopPropagation(); 
-                        editarTarefa(t.id, t.titulo); 
-                      }} 
-                      style={{ cursor: 'pointer', fontSize: '18px', padding: '5px' }}
-                    >
-                      ✏️
-                    </span>
-                    <Trash2 className="h-5 w-5" />
-                  </div>
+                  <Trash2 className="h-5 w-5" />
                 </Button>
+                
+                {/* LÁPIS TOTALMENTE SEPARADO E DO LADO FORA */}
+                <span 
+                  onClick={(e) => { 
+                    e.stopPropagation(); 
+                    editarTarefa(t.id, t.titulo); 
+                  }} 
+                  style={{ cursor: 'pointer', fontSize: '18px', padding: '10px', marginLeft: '10px', zIndex: 9999 }}
+                >
+                  ✏️
+                </span>
             </Card>
           </div>
         </div>
